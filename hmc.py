@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib import cm
 
 
 def hmc(w, epsilon, T, H, H_grad):
@@ -18,7 +19,7 @@ def hmc(w, epsilon, T, H, H_grad):
         w = w_old
     return w
 
-epsilon = 0.1
+epsilon = 0.5
 T = 1
 #H = lambda w: np.sum(w ** 2) / 2.0
 normal_dens = lambda x, mean: (1.0 / (2 * np.pi) ** (2 * 0.5) * np.exp(-np.sum((x - mean) ** 2) / 2.0))
@@ -27,10 +28,17 @@ H = lambda w: -np.log(0.3 * normal_dens(w, np.array([-1,-1])) + 0.7 * normal_den
 H_grad = lambda w: -(0.3 * normal_dens(w, np.array([-1,-1])) * (w - np.array([-1,-1])) + 0.7 * normal_dens(w, np.array([2,2])) * (w - np.array([2,2])) ) / (0.3 * normal_dens(w, np.array([-1,-1])) + 0.7 * normal_dens(w, np.array([2,2])))
 
 w = np.random.normal(size=2)
-for _ in range(20):
+x = []
+y = []
+t = []
+for i in range(200):
     w = hmc(w, epsilon, T, H, H_grad)
     #print(w[0], w[1])
-    plt.plot(w[0], w[1], marker='.')
+    x.append(w[0])
+    y.append(w[1])
+    t.append(i)
+
+plt.scatter(x, y, c=t, cmap=cm.jet, marker='.', lw=0)
 plt.xlim(-4,4)
 plt.ylim(-4,4)
 
