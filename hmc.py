@@ -3,7 +3,7 @@ from plotter import Plotter
 
 
 def hmc(w, epsilon, T, H, H_grad, plotter):
-    w_old = w
+    w_old = np.copy(w)
     p = np.random.normal(size=len(w))
     h_old = np.sum(p ** 2) / 2 + H(w_old)
     for _ in range(T):
